@@ -162,6 +162,9 @@ void calculateResult(int row,int column,int tab[][column],int *result,int rowChe
     printf("Le matrice n'existe pas \n");
     printf("Désolé \n");
     }
+    
+    /**try2 untuk git,tgk jadi x*/
+    
     else{
     calculateSomme(row,column,tab,rowChercher,columnChercher,result);
     printf("Vertical = %d\n",result[0]);
