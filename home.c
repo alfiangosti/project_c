@@ -3,6 +3,9 @@
 
 #include <libsx.h>
 
+#define ROW 6
+#define COLUMN 7
+
 /*
  * compile et execute
  * make && ./home
@@ -55,12 +58,12 @@ void readGamefile(char *f){
  * (Ex: 'a' pas joueable, autre de 'a' joueable)
  */
 
-void readGamefile2(char *f,int column,int row,int tab[][column]){
+void readGamefile2(char *f,int tab[][COLUMN]){
     
     
    char ch;
    FILE *fp;
-   int i=row-1;
+   int i=ROW-1;
    int j=0;
    
    
@@ -105,36 +108,17 @@ void readGamefile2(char *f,int column,int row,int tab[][column]){
     
 }
 
-/*
-void calculerVertical(int column,int row,int tab[][column]){
-for(i=0;i<row;i++){
-        printf(" | ");
-        for(j=0;j<column;j++){
-            if(tab[i][j]==-1){
-                printf("   ");
-            }
-            else{
-            printf(" %d ",tab[][j]);
-            }
-        
-        }
-        printf(" | ");
-        printf("\n");
-    
-    }
-}
-*/
 
 
 
-void calculateSomme(int row,int column,int tab[][column],int rowChercher,int columnChercher,int *result){
+void calculateSomme(int tab[][COLUMN],int rowChercher,int columnChercher,int *result){
     int i,j;
     int angle45=rowChercher-columnChercher;
     int angle135=-rowChercher-columnChercher;
     
-    for(i=row-1;i>=0;i--){
+    for(i=ROW-1;i>=0;i--){
         
-        for(j=0;j<column;j++){
+        for(j=0;j<COLUMN;j++){
             if(j==columnChercher){
                 if(tab[i][j] != -1){
                 result[0]=result[0]+tab[i][j];
@@ -159,7 +143,7 @@ void calculateSomme(int row,int column,int tab[][column],int rowChercher,int col
 
 
 
-void calculateResult(int row,int column,int tab[][column],int *result,int rowChercher,int columnChercher){
+void calculateResult(int tab[][COLUMN],int *result,int rowChercher,int columnChercher){
  
     if(tab[rowChercher][columnChercher]== -1){
     printf("Le matrice n'existe pas \n");
@@ -169,7 +153,7 @@ void calculateResult(int row,int column,int tab[][column],int *result,int rowChe
     /**try2 untuk git,tgk jadi x*/
     
     else{
-    calculateSomme(row,column,tab,rowChercher,columnChercher,result);
+    calculateSomme(tab,rowChercher,columnChercher,result);
     printf("Vertical = %d\n",result[0]);
     printf("Angle 45 = %d\n",result[1]);
     printf("Angle 135 = %d\n",result[2]);
@@ -181,15 +165,15 @@ void calculateResult(int row,int column,int tab[][column],int *result,int rowChe
 
 }
 
-void viewTable(int row,int column,int tab[][column]){
+void viewTable(int tab[][COLUMN]){
         
         int i,j;
         
-        readGamefile2("game.txt",column,row,tab);
+        readGamefile2("game2.txt",tab);
     
-    for(i=row-1;i>=0;i--){
+    for(i=ROW-1;i>=0;i--){
         printf(" | ");
-        for(j=0;j<column;j++){
+        for(j=0;j<COLUMN;j++){
             printf(" %d%d ",i,j);
 
         }
@@ -198,9 +182,9 @@ void viewTable(int row,int column,int tab[][column]){
     
     }
     
-    for(i=row-1;i>=0;i--){
+    for(i=ROW-1;i>=0;i--){
         printf(" | ");
-        for(j=0;j<column;j++){
+        for(j=0;j<COLUMN;j++){
             if(tab[i][j]==-1){
                 printf("    ");
             }
@@ -219,7 +203,7 @@ void viewTable(int row,int column,int tab[][column]){
 }
 
 
-void viewSelection(int row,int column,int tab[][column],int rowChercher,int columnChercher){
+void viewSelection(int tab[][COLUMN],int rowChercher,int columnChercher){
     int i,j;
     
     int angle45=rowChercher-columnChercher;
@@ -228,11 +212,11 @@ void viewSelection(int row,int column,int tab[][column],int rowChercher,int colu
     printf(" **************************** \n");
     printf(" Vous avez sélectionné la case : %d%d \n",rowChercher,columnChercher);
     
-    for(i=row-1;i>=0;i--){
+    for(i=ROW-1;i>=0;i--){
         
         printf(" | ");
         
-        for(j=0;j<column;j++){
+        for(j=0;j<COLUMN;j++){
             
             if(tab[i][j] == -1){
                     printf(" ** ");
@@ -255,7 +239,7 @@ void viewSelection(int row,int column,int tab[][column],int rowChercher,int colu
 
 }
 
-void viewQuestion(int row,int column,int tab[][column]){
+void viewQuestion(int tab[][COLUMN]){
     int i,j; 
     int horizontal[7]={0,0,0,0,0,0,0};
     
@@ -263,8 +247,8 @@ void viewQuestion(int row,int column,int tab[][column]){
     int angle45[7]={0,0,0,0,0,0,0};
     int angle135[7]={0,0,0,0,0,0,0};
    
-    for(i=row-1;i>=0;i--){       
-        for(j=0;j<column;j++){
+    for(i=ROW-1;i>=0;i--){       
+        for(j=0;j<COLUMN;j++){
                 if(tab[i][j] != -1){
                         switch(j){
                             case 0:
@@ -344,13 +328,13 @@ void viewQuestion(int row,int column,int tab[][column]){
         printf(" %d ",horizontal[i] );
     }
     printf("\n");
-    printf("Angle45 : ");
+    printf("Angle45    : ");
     for(i=0;i<7;i++){
         printf(" %d ",angle45[i] );
     }
     printf("\n");
     
-    printf("Angle135 : ");
+    printf("Angle135   : ");
     for(i=0;i<7;i++){
         printf(" %d ",angle135[i] );
     }
@@ -358,7 +342,7 @@ void viewQuestion(int row,int column,int tab[][column]){
 
 }
 
-void playGame(int row,int column,int tab[][column],int *result){
+void playGame(int tab[][COLUMN],int *result){
     int choix;
     int rowChercher,columnChercher;
     do{
@@ -373,8 +357,8 @@ void playGame(int row,int column,int tab[][column],int *result){
            switch(choix){
                case 1: 
                         
-                        viewTable(row,column,tab);
-                        viewQuestion(row,column,tab);
+                        viewTable(tab);
+                        viewQuestion(tab);
                         printf("Select case number\n");
                         printf("Row's number : ");
                         scanf("%d",&rowChercher);
@@ -382,8 +366,8 @@ void playGame(int row,int column,int tab[][column],int *result){
                         printf("Column's number : ");
                         scanf("%d",&columnChercher);
                         
-                        viewSelection(row,column,tab,rowChercher,columnChercher);
-                        calculateResult(row,column,tab,result,rowChercher,columnChercher);
+                        viewSelection(tab,rowChercher,columnChercher);
+                        calculateResult(tab,result,rowChercher,columnChercher);
                         
                  break;
                case 2: break;
@@ -408,12 +392,10 @@ void playGame(int row,int column,int tab[][column],int *result){
 
 int main(int argc,char **argv){
   
-    int row =6;
-    int column =7;
-    int tab[row][column];
+    int tab[ROW][COLUMN];
     int result[3]={0,0,0};
    
-    playGame(row,column,tab,result);
+    playGame(tab,result);
     
     
     
