@@ -1,0 +1,38 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <libsx.h>
+#include "data.h"
+#include "pile.h"
+
+/*Rôle : Fonction d'initialisation de la structure de données*/
+void initValeurCourante(ValeurCourante *d){
+	d->valeur=0; /*Initialise la valeur courante*/
+	/*d->ZoneAffich=w;*/
+	/*  d->p=PileVide; */
+  	d->iCase=-10; /* il faut initialiser iCase et jCase car sinon erreur de segmentation lorsqu'on clique sur la drawArea vide au lancement du jeu */
+	d->jCase=-10;
+}
+
+/*Rôle:Recupere les coordonnées de la valeur courante en cours d'utilisation*/
+void setVal(ValeurCourante* vc, int i, int j){
+  vc->iCase=i;
+  vc->jCase=j;
+}
+
+
+/*
+
+Pile *getPile(ValeurCourante *vc){
+	return &(vc->pile);
+}
+
+
+int getValeur(ValeurCourante *vc){
+	retrurn vc->valeur;
+}
+
+void raz(ValeurCourante *vc){ 
+	vc->valeur=0;
+}
+
+*/

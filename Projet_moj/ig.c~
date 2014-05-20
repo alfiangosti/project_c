@@ -1,0 +1,109 @@
+#include <stdio.h>
+#include <libsx.h>
+#include "callbacks.h"
+#include "data.h"
+#include "pile.h"
+#define WIDTH 500
+#define HEIGHT 500
+/* On trace la grille et prend en par@ la taille  */
+void init_display( int argc, char **argv, void *d ){
+	ValeurCourante *vc=d;
+	/* Definir une drawing area  pour tracer la grille */
+	/*Widget MakeDrawArea(int width, int height, RedisplayCB func, void *data) ; */
+	Widget ch[10],grilleJeu,titre,jouer,undo,quit,esp,espace,facile,moyen,difficile;
+	
+	
+	
+	/* Les boutons de niveau  */
+	esp=MakeLabel("         ");
+	SetWidgetPos(esp, NO_CARE, NULL,NO_CARE, NULL);
+
+	facile=MakeButton("   Facile   ",NO_CARE, vc);
+ 	SetWidgetPos(facile, PLACE_RIGHT , esp,NO_CARE, NULL);
+  
+	moyen=MakeButton("    Moyen    ",NO_CARE, vc);
+	SetWidgetPos(moyen, PLACE_RIGHT, facile ,NO_CARE, NULL);
+  
+	difficile=MakeButton("  Difficile  ",NO_CARE, vc);
+	SetWidgetPos(difficile, PLACE_RIGHT, moyen ,NO_CARE, NULL);
+
+
+	/*La zone ou on affiche la grille */
+	grilleJeu=MakeDrawArea(WIDTH, HEIGHT, redisplay, vc);
+	SetWidgetPos(grilleJeu, NO_CARE, NULL,PLACE_UNDER, facile);
+	SetButtonDownCB(grilleJeu,click);
+/* void SetButtonDownCB(Widget w, MouseButtonCB func);
+
+This function sets up a callback that will be called everytime the user presses a mouse button in the specified drawing area widget `w'.
+The callback function should be declared as follows:
+
+    void  func(Widget w, int which_button, int x, int y, void *data)
+    {
+    }
+
+Then, whenever the user presses a mouse button in the drawing area, your callback is called. The first argument is the drawing area widget where the event happened. The next argument is an integer specifying which button was pressed. It is a small positive integer. A value of one is the left mouse button, two is the middle mouse button and three is the right mouse button. 
+
+*/
+  
+	/* Les boutons du menu */
+	jouer=MakeButton("Jouer",NO_CARE, vc);
+ 	undo=MakeButton("Undo",NO_CARE, vc);
+  	quit=MakeButton("Quit",quitter,vc);
+ 	titre=MakeLabel("             MOJETTE   ");
+
+	/* Les chiffres a placer dans la grille */
+	espace = MakeLabel("                         ");
+	ch[0] = MakeLabel("         CHIFFRES A PLACER        ");
+	ch[1] = MakeButton("   1   ", afficher1, vc);
+	ch[2] = MakeButton("   2   ", NO_CARE, vc);
+	ch[3] = MakeButton("   3   ", NO_CARE, vc);
+	ch[4] = MakeButton("   4   ", NO_CARE, vc);
+	ch[5] = MakeButton("   5   ", NO_CARE, vc);
+	ch[6] = MakeButton("   6   ", NO_CARE, vc);
+	ch[7] = MakeButton("   7   ", NO_CARE, vc);
+	ch[8] = MakeButton("   8   ", NO_CARE, vc);
+	ch[9] = MakeButton("   9   ", NO_CARE, vc);
+	ch[10] = MakeButton("          Clear          ", NO_CARE, vc);
+  
+
+	vc->ZoneAffich=grilleJeu;
+	initValeurCourante(d);
+
+	/*Placement des widgets */
+	SetWidgetPos(titre,PLACE_RIGHT,grilleJeu,NO_CARE,NULL);
+	SetWidgetPos(jouer,PLACE_RIGHT,grilleJeu,PLACE_UNDER,titre);
+	SetWidgetPos(undo, PLACE_RIGHT,grilleJeu,PLACE_UNDER,jouer);
+	SetWidgetPos(quit,PLACE_RIGHT,grilleJeu,PLACE_UNDER,undo);
+
+	SetWidgetPos(espace, PLACE_RIGHT, grilleJeu, PLACE_UNDER, quit);
+	SetWidgetPos(ch[0],  PLACE_RIGHT, grilleJeu, PLACE_UNDER, espace);
+	SetWidgetPos(ch[1],  PLACE_RIGHT, grilleJeu, PLACE_UNDER, ch[0]);
+	SetWidgetPos(ch[2],  PLACE_RIGHT, ch[1], PLACE_UNDER, ch[0]);
+	SetWidgetPos(ch[3],  PLACE_RIGHT, ch[2], PLACE_UNDER, ch[0]);
+	SetWidgetPos(ch[4],  PLACE_RIGHT, grilleJeu, PLACE_UNDER, ch[1]);
+	SetWidgetPos(ch[5],  PLACE_RIGHT, ch[4], PLACE_UNDER, ch[2]);
+	SetWidgetPos(ch[6],  PLACE_RIGHT, ch[5], PLACE_UNDER, ch[3]);
+	SetWidgetPos(ch[7],  PLACE_RIGHT, grilleJeu, PLACE_UNDER, ch[4]);
+	SetWidgetPos(ch[8],  PLACE_RIGHT, ch[7], PLACE_UNDER, ch[5]);
+	SetWidgetPos(ch[9],  PLACE_RIGHT, ch[8], PLACE_UNDER, ch[6]);
+	SetWidgetPos(ch[10],  PLACE_RIGHT, grilleJeu, PLACE_UNDER, ch[7]);
+  
+
+	/*pour gérer les couleurs*/
+	GetStandardColors();
+  
+	/*pour afficher l'interface*/
+	ShowDisplay();
+}
+
+int main(int argc, char **argv){
+  ValeurCourante d;
+  if(OpenDisplay(argc, argv) == 0){
+    fprintf(stderr, "Can't open display\n");
+    return 1;
+  }
+  
+  init_display(argc, argv,&d);
+  MainLoop();
+  return 0;
+}

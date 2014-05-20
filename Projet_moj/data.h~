@@ -1,0 +1,34 @@
+#ifndef DATA_H
+#define DATA_H
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <libsx.h>
+#include "pile.h"
+#define MAX 50
+
+	typedef struct{
+		int largeur;  /*  largeur de la  grille en nombre de cases */
+		int hauteur;  /*  hauteur de la  grille en nombre de cases */
+		int tabGrille[MAX][MAX];  /* pour acceder aux valeurs de la grille */
+	}Grille;
+
+
+	typedef struct {
+		Grille grille;
+		Widget ZoneAffich; 
+		int iCase;/*Valeur de i(coordonnée en case,pas en pixels) de la case en cours d'utilisation sur la drawArea*/
+ 		int jCase;/*Valeur de j  de la case en cours d'utilisation sur la drawArea*/
+        	/*  Pile p; */ 
+		/*  int valeur; */
+	}ValeurCourante;
+
+	
+
+	extern void initValeurCourante(ValeurCourante *);
+	extern void setVal(ValeurCourante* vc, int i, int j);
+/*	extern Pile *getPile(ValeurCourante *);
+	extern int getValeur(ValeurCourante *);
+	extern void raz(ValeurCourante *);   */
+
+#endif
