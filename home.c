@@ -5,16 +5,11 @@
 
 /*
  * compile et execute
- * gcc -Wall -o calc calc.c -lsx && ./calc
+ * make && ./home
  */
 
 /*
- * role : afficher des widgets
- */
-
-
-/*
- * role : afficher le contenu d'un fichier
+ * role : file to replicate mojette game
  */
 
 void readGamefile(char *f){
@@ -54,6 +49,11 @@ void readGamefile(char *f){
    
     
 }
+
+/*
+ * Role: lire a partir un fichier le mask pour jouer le jeu 
+ * (Ex: 'a' pas joueable, autre de 'a' joueable)
+ */
 
 void readGamefile2(char *f,int column,int row,int tab[][column]){
     
@@ -125,15 +125,17 @@ for(i=0;i<row;i++){
 }
 */
 
-void calculateSomme(int row,int column,int tab[][column],int rowCherche,int columnCherche,int *result){
+
+
+void calculateSomme(int row,int column,int tab[][column],int rowChercher,int columnChercher,int *result){
     int i,j;
-    int angle45=rowCherche-columnCherche;
-    int angle135=-rowCherche-columnCherche;
+    int angle45=rowChercher-columnChercher;
+    int angle135=-rowChercher-columnChercher;
     
     for(i=row-1;i>=0;i--){
         
         for(j=0;j<column;j++){
-            if(j==columnCherche){
+            if(j==columnChercher){
                 if(tab[i][j] != -1){
                 result[0]=result[0]+tab[i][j];
                 }
@@ -154,6 +156,7 @@ void calculateSomme(int row,int column,int tab[][column],int rowCherche,int colu
     }
 
 }
+
 
 
 void calculateResult(int row,int column,int tab[][column],int *result,int rowChercher,int columnChercher){
@@ -184,11 +187,11 @@ void viewTable(int row,int column,int tab[][column]){
         
         readGamefile2("game.txt",column,row,tab);
     
-        for(i=row-1;i>=0;i--){
+    for(i=row-1;i>=0;i--){
         printf(" | ");
         for(j=0;j<column;j++){
             printf(" %d%d ",i,j);
-        
+
         }
         printf(" | ");
         printf("\n");
@@ -215,6 +218,146 @@ void viewTable(int row,int column,int tab[][column]){
 
 }
 
+
+void viewSelection(int row,int column,int tab[][column],int rowChercher,int columnChercher){
+    int i,j;
+    
+    int angle45=rowChercher-columnChercher;
+    int angle135=-rowChercher-columnChercher;
+    
+    printf(" **************************** \n");
+    printf(" Vous avez sélectionné la case : %d%d \n",rowChercher,columnChercher);
+    
+    for(i=row-1;i>=0;i--){
+        
+        printf(" | ");
+        
+        for(j=0;j<column;j++){
+            
+            if(tab[i][j] == -1){
+                    printf(" ** ");
+                }
+            else{
+                if((j==columnChercher)||((i-j)==angle45)||((-i-j)==angle135)){
+                    printf(" xx ");
+                }
+                else{
+                    printf(" ** ");
+                }
+            
+            }
+        
+        }  
+        printf(" | ");
+        printf("\n");
+    
+    }
+
+}
+
+void viewQuestion(int row,int column,int tab[][column]){
+    int i,j; 
+    int horizontal[7]={0,0,0,0,0,0,0};
+    
+    /*angle45[0] est le plus bas,vers le plus haut*/
+    int angle45[7]={0,0,0,0,0,0,0};
+    int angle135[7]={0,0,0,0,0,0,0};
+   
+    for(i=row-1;i>=0;i--){       
+        for(j=0;j<column;j++){
+                if(tab[i][j] != -1){
+                        switch(j){
+                            case 0:
+                                horizontal[0]=horizontal[0]+tab[i][j];
+                                break;
+                            case 1:
+                                horizontal[1]=horizontal[1]+tab[i][j];
+                                break;
+                            case 2:
+                                horizontal[2]=horizontal[2]+tab[i][j];
+                                break;
+                            case 3:
+                                horizontal[3]=horizontal[3]+tab[i][j];
+                                break;
+                            case 4:
+                                horizontal[4]=horizontal[4]+tab[i][j];
+                                break;
+                            case 5:
+                                horizontal[5]=horizontal[5]+tab[i][j];
+                                break;
+                            case 6:
+                                horizontal[6]=horizontal[6]+tab[i][j];
+                                break;
+                        }
+                        switch(i-j){
+                            case -4:
+                                angle45[0]=angle45[0]+tab[i][j];
+                                break;
+                            case -3:
+                                angle45[1]=angle45[1]+tab[i][j];
+                                break;
+                            case -2:
+                                angle45[2]=angle45[2]+tab[i][j];
+                                break;
+                            case -1:
+                                angle45[3]=angle45[3]+tab[i][j];
+                                break;
+                            case 0:
+                                angle45[4]=angle45[4]+tab[i][j];
+                                break;
+                            case 1:
+                                angle45[5]=angle45[5]+tab[i][j];
+                                break;
+                            case 2:
+                                angle45[6]=angle45[6]+tab[i][j];
+                                break;
+                        }
+                        switch(-i-j){
+                            case -8:
+                                angle135[0]=angle135[0]+tab[i][j];
+                                break;
+                            case -7:
+                                angle135[1]=angle135[1]+tab[i][j];
+                                break;
+                            case -6:
+                                angle135[2]=angle135[2]+tab[i][j];
+                                break;
+                            case -5:
+                                angle135[3]=angle135[3]+tab[i][j];
+                                break;
+                            case -4:
+                                angle135[4]=angle135[4]+tab[i][j];
+                                break;
+                            case -3:
+                                angle135[5]=angle135[5]+tab[i][j];
+                                break;
+                            case -2:
+                                angle135[6]=angle135[6]+tab[i][j];
+                                break;
+                        }
+                    }         
+        }  
+        
+    }
+    printf("Horizontal : ");
+    for(i=0;i<7;i++){
+        printf(" %d ",horizontal[i] );
+    }
+    printf("\n");
+    printf("Angle45 : ");
+    for(i=0;i<7;i++){
+        printf(" %d ",angle45[i] );
+    }
+    printf("\n");
+    
+    printf("Angle135 : ");
+    for(i=0;i<7;i++){
+        printf(" %d ",angle135[i] );
+    }
+    printf("\n");
+
+}
+
 void playGame(int row,int column,int tab[][column],int *result){
     int choix;
     int rowChercher,columnChercher;
@@ -231,6 +374,7 @@ void playGame(int row,int column,int tab[][column],int *result){
                case 1: 
                         
                         viewTable(row,column,tab);
+                        viewQuestion(row,column,tab);
                         printf("Select case number\n");
                         printf("Row's number : ");
                         scanf("%d",&rowChercher);
@@ -238,6 +382,7 @@ void playGame(int row,int column,int tab[][column],int *result){
                         printf("Column's number : ");
                         scanf("%d",&columnChercher);
                         
+                        viewSelection(row,column,tab,rowChercher,columnChercher);
                         calculateResult(row,column,tab,result,rowChercher,columnChercher);
                         
                  break;
